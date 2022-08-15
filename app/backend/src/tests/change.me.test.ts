@@ -1,18 +1,20 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import { Request, Response } from 'express'
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
 import { App, app } from '../app';
-import Example from '../database/models/ExampleModel';
 
-import { Response } from 'superagent';
+import LoginController from '../controllers/LoginController';
+import LoginServices from '../services/LoginServices';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('Seu teste', () => {
+describe('Testes do APP', () => {
+  beforeEach(() => sinon.restore())
   describe('Testa rota default do projeto', () => {
     it('deve retornar um status 200', async () => {
       const httpResponse = await chai.request(app).get('/');
