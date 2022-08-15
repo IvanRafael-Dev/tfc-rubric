@@ -1,0 +1,26 @@
+import * as bcrypt from 'bcryptjs';
+import ILogin from '../interfaces/ILogin';
+import User from '../database/models/User';
+import UnauthorizedError from '../utils/errors/unauthorized-error';
+import JWT from '../utils/jwtUtils/JWT';
+
+export default class LoginServices {
+  constructor(
+    private userModel = User,
+    private jwtService = new JWT(),
+  ) {}
+
+  static validatePassword(password: string, user: User | null): void {
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      throw new UnauthorizedError('Incorrect email or password');
+    }
+  }
+
+  public async login({ email, password }: ILogin): Promise<string> {
+    const user = await this.userModel.findOne({ where: { email } });
+    LoginServices.validatePassword(password, user);
+    const { id, role, username } = user as User;
+    const token = this.jwtService.sign({ id, email, role, username });
+    return token;
+  }
+}
