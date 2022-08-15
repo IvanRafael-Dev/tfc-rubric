@@ -24,7 +24,7 @@ describe('POST /login', () => {
         sinon.stub(bcrypt, 'compareSync').returns(false)
         const httpResponse = await chai.request(app).post('/login').send();
         expect(httpResponse.status).to.equal(401);
-        expect(httpResponse.body).to.be.equal({ message: 'Incorrect email or password'})
+        expect(httpResponse.body).to.be.deep.equal({ message: 'Incorrect email or password' })
       });
     });
 
@@ -37,7 +37,7 @@ describe('POST /login', () => {
         sinon.stub(bcrypt, 'compareSync').returns(false)
         const httpResponse = await chai.request(app).post('/login').send();
         expect(httpResponse.status).to.equal(401);
-        expect(httpResponse.body).to.be.equal({ message: 'Incorrect email or password'});
+        expect(httpResponse.body).to.be.deep.equal({ message: 'Incorrect email or password'});
       });
     });
   });
