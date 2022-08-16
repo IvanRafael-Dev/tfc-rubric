@@ -12,9 +12,9 @@ export default class LoginController {
     return response.status(200).json({ token });
   }
 
-  public async validate(request: Request, response: Response): Promise<Response> {
+  public validate(request: Request, response: Response): Response {
     const token = request.headers.authorization;
-    const role = await this.loginService.validate(token);
+    const role = this.loginService.validate(token);
     return response.status(200).json({ role });
   }
 }

@@ -40,7 +40,7 @@ export default class LoginServices {
     return token;
   }
 
-  public async validate(token: string | undefined): Promise<string> {
+  public validate(token: string | undefined): string {
     const payload = this.jwtService.verify(token || '');
     const { role } = payload;
     return role;

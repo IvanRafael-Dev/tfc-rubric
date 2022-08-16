@@ -1,13 +1,9 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import { Request, Response } from 'express'
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
 import { App, app } from '../app';
-
-import LoginController from '../controllers/LoginController';
-import LoginServices from '../services/LoginServices';
 
 chai.use(chaiHttp);
 

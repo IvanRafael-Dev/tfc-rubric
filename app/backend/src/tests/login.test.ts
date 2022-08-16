@@ -8,10 +8,6 @@ import chaiHttp = require('chai-http');
 import { App, app } from '../app';
 import User from '../database/models/User';
 
-import { Response } from 'superagent';
-import LoginServices from '../services/LoginServices';
-import MissingParamError from '../utils/errors/missing-param-error';
-
 chai.use(chaiHttp);
 
 const { expect } = chai;
