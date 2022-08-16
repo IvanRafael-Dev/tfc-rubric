@@ -39,4 +39,10 @@ export default class LoginServices {
     const token = this.jwtService.sign({ id, email, role, username });
     return token;
   }
+
+  public async validate(token: string | undefined): Promise<string> {
+    const payload = this.jwtService.verify(token || '');
+    const { role } = payload;
+    return role;
+  }
 }

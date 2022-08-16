@@ -32,7 +32,8 @@ describe('Testes do APP', () => {
       const appStart = new App()
       expect(appStart.start(8080))
     })
-  })
+  });
+  
 
   /**
    * Exemplo do uso de stubs com tipos
