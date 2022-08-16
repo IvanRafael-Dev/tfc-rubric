@@ -1,8 +1,10 @@
 import * as bcrypt from 'bcryptjs';
+import MissingParamError from '../utils/errors/missing-param-error';
 import ILogin from '../interfaces/ILogin';
 import User from '../database/models/User';
 import UnauthorizedError from '../utils/errors/unauthorized-error';
 import JWT from '../utils/jwtUtils/JWT';
+import InvalidParamError from '../utils/errors/invalid-param-error';
 
 export default class LoginServices {
   constructor(
@@ -16,7 +18,21 @@ export default class LoginServices {
     }
   }
 
+  static validateUserLoginData(email: string, password: string): void {
+    if (!email || !password) {
+      throw new MissingParamError('All fields must be filled');
+    }
+  }
+
+  static validateEmailFormat(email: string): void {
+    if (!email.includes('@')) {
+      throw new InvalidParamError('Incorrect email or password');
+    }
+  }
+
   public async login({ email, password }: ILogin): Promise<string> {
+    LoginServices.validateUserLoginData(email, password);
+    LoginServices.validateEmailFormat(email);
     const user = await this.userModel.findOne({ where: { email } });
     LoginServices.validatePassword(password, user);
     const { id, role, username } = user as User;
