@@ -7,6 +7,8 @@ const errorMiddleware: ErrorRequestHandler = (err, req, res, _next) => {
   }
 
   if (err instanceof JsonWebTokenError) {
+    console.log(err);
+
     return res.status(401).json({ message: err.message });
   }
   return res.status(500).json({ message: err.message });
