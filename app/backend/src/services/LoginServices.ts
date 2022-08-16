@@ -34,8 +34,6 @@ export default class LoginServices {
     LoginServices.validateUserLoginData(email, password);
     LoginServices.validateEmailFormat(email);
     const user = await this.userModel.findOne({ where: { email } });
-    console.log(user);
-
     LoginServices.validatePassword(password, user);
     const { id, role, username } = user as User;
     const token = this.jwtService.sign({ id, email, role, username });
