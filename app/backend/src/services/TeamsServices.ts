@@ -1,6 +1,6 @@
 import Team from '../database/models/Team';
 
-export default class LoginServices {
+export default class TeamServices {
   constructor(
     private teamModel = Team,
   ) {}
