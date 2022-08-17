@@ -1,14 +1,12 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
-import * as bcrypt from 'bcryptjs';
 
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 
-
-import JWT from '../utils/jwtUtils/JWT';
+import * as jwt from 'jsonwebtoken';
 
 chai.use(chaiHttp);
 
@@ -21,7 +19,7 @@ describe('GET /login/validate', () => {
       const payload = {
         role: 'admin'
       };
-      sinon.stub(JWT.prototype, 'verify').returns(payload)
+      sinon.stub(jwt, 'verify').callsFake(() => payload)
       const httpResponse = await chai
         .request(app)
         .get('/login/validate')
@@ -30,4 +28,24 @@ describe('GET /login/validate', () => {
       expect(httpResponse.body).to.deep.equal(payload)
     })
   })
-})
+
+  describe('quando o token é inválido ou foi expirado', () => {
+    it('deve retornar um status 401', async () => {
+      sinon.stub(jwt, 'verify').throws()
+      const httpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .set('Authorization', 'invalid_token');
+      expect(httpResponse.status).to.equal(401);
+    });
+  });
+
+  describe('quando o token não é informado', () => {
+    it('deve retornar um status 401', async () => {
+      const httpResponse = await chai
+        .request(app)
+        .get('/login/validate');
+      expect(httpResponse.status).to.equal(401);
+    });
+  });
+});

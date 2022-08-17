@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcryptjs';
+import { JsonWebTokenError } from 'jsonwebtoken';
 import MissingParamError from '../utils/errors/missing-param-error';
 import ILogin from '../interfaces/ILogin';
 import User from '../database/models/User';
@@ -41,7 +42,10 @@ export default class LoginServices {
   }
 
   public validate(token: string | undefined): string {
-    const payload = this.jwtService.verify(token || '');
+    if (!token) {
+      throw new JsonWebTokenError('Token must be a valid token');
+    }
+    const payload = this.jwtService.verify(token);
     const { role } = payload;
     return role;
   }
