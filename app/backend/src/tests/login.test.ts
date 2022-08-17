@@ -20,7 +20,6 @@ describe('POST /login', () => {
     describe('quando o email não é enviado', () => {
       it('deve retornar um status 400', async () => {
         const validLoginBody = { password: 'valid_password' };
-        // sinon.stub(LoginServices, 'validateUserLoginData').throws(new MissingParamError('All fields must be filled'))
         const httpResponse = await chai.request(app).post('/login').send(validLoginBody);
         expect(httpResponse.status).to.equal(400);
         expect(httpResponse.body).to.be.deep.equal({ message: 'All fields must be filled' })
