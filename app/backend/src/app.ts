@@ -15,6 +15,9 @@ class App {
 
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
+    this.app.get('/internal-error', (_req, _res) => {
+      throw new Error();
+    });
     this.app.use(errorMiddleware);
   }
 
