@@ -69,7 +69,7 @@ describe('GET /teams/:id', () => {
       sinon.stub(Team, 'findByPk').resolves(team as Team);
       const httpRequest = await chai.request(app).get('/teams/1');
       expect(httpRequest.body).to.deep.equal(team);
-      expect(httpRequest.body).to.have.all.keys('id', 'teamName')
+      expect(httpRequest.body).to.have.all.keys('id', 'teamName');
     });
   });
 });
