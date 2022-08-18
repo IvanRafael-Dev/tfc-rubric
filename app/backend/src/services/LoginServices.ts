@@ -41,7 +41,7 @@ export default class LoginServices {
     return token;
   }
 
-  public validate(token: string | undefined): string {
+  public validate(token: string): string {
     if (!token) {
       throw new JsonWebTokenError('Token must be a valid token');
     }

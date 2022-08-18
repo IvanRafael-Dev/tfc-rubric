@@ -13,7 +13,7 @@ export default class LoginController {
   }
 
   public validate(request: Request, response: Response): Response {
-    const token = request.headers.authorization;
+    const token = request.headers.authorization as string;
     const role = this.loginService.validate(token);
     return response.status(200).json({ role });
   }
