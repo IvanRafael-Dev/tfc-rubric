@@ -1,3 +1,4 @@
+import JWT from '../utils/jwtUtils/JWT';
 import * as sinon from 'sinon';
 import * as chai from 'chai';
 import * as bcrypt from 'bcryptjs';
@@ -5,8 +6,9 @@ import * as bcrypt from 'bcryptjs';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
-import { App, app } from '../app';
+import { app } from '../app';
 import User from '../database/models/User';
+import LoginServices from '../services/LoginServices';
 
 chai.use(chaiHttp);
 

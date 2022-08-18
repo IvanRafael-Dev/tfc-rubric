@@ -1,3 +1,4 @@
+import ConflictError from '../utils/errors/conflict-error';
 import IMatchRequest from '../interfaces/IMatchRequest';
 import Match from '../database/models/Match';
 
@@ -22,6 +23,9 @@ export default class MatchesServices {
   }
 
   public async add(match: IMatchRequest): Promise<Match> {
+    if (match.homeTeam === match.awayTeam) {
+      throw new ConflictError('It is not possible to create a match with two equal teams');
+    }
     const newMatch = await this.matchModel.create({ ...match, inProgress: true });
     return newMatch;
   }
