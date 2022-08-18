@@ -9,6 +9,7 @@ const router = Router();
 
 router.get('/', (req, res) => matchesController.get(req, res));
 router.post('/', validateToken, (req, res) => matchesController.add(req, res));
+router.patch('/:id/finish', (req, res) => matchesController.endGame(req, res));
 // router.get('/:id', (req, res) => teamsController.getById(req, res));
 
 export default router;

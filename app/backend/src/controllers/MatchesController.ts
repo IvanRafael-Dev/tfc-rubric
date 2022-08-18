@@ -16,4 +16,9 @@ export default class MatchesController {
     const newMatch = await this.matchesServices.add(request.body);
     return response.status(201).json(newMatch);
   }
+
+  public async endGame(request: Request, response: Response): Promise<Response> {
+    await this.matchesServices.endGame(request.params.id);
+    return response.status(200).json({ message: 'Finished' });
+  }
 }
