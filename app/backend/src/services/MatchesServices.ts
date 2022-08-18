@@ -1,3 +1,4 @@
+import IMatchRequest from '../interfaces/IMatchRequest';
 import Match from '../database/models/Match';
 
 const association = {
@@ -18,6 +19,11 @@ export default class MatchesServices {
     }
     const matches = await this.matchModel.findAll(association);
     return matches;
+  }
+
+  public async add(match: IMatchRequest): Promise<Match> {
+    const newMatch = await this.matchModel.create({ ...match, inProgress: true });
+    return newMatch;
   }
 
   // public async getById(id: number): Promise<Team> {

@@ -12,9 +12,8 @@ export default class MatchesController {
     return response.status(200).json(matches);
   }
 
-  // public async getById(request: Request, response: Response): Promise<Response> {
-  //   const { id } = request.params;
-  //   const team = await this.teamsServices.getById(Number(id));
-  //   return response.status(200).json(team);
-  // }
+  public async add(request: Request, response: Response): Promise<Response> {
+    const newMatch = await this.matchesServices.add(request.body);
+    return response.status(201).json(newMatch);
+  }
 }
