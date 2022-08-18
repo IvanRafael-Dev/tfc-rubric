@@ -1,3 +1,4 @@
+import NotFoundError from '../utils/errors/not-found-error';
 import Team from '../database/models/Team';
 
 export default class TeamServices {
@@ -12,6 +13,9 @@ export default class TeamServices {
 
   public async getById(id: number): Promise<Team> {
     const team = await this.teamModel.findByPk(id);
+    if (!team) {
+      throw new NotFoundError('There is no team with such id!');
+    }
     return team as Team;
   }
 }

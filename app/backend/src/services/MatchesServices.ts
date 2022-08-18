@@ -1,6 +1,7 @@
 import ConflictError from '../utils/errors/conflict-error';
 import IMatchRequest from '../interfaces/IMatchRequest';
 import Match from '../database/models/Match';
+import TeamServices from './TeamsServices';
 
 const association = {
   attributes: { exclude: ['home_team', 'away_team'] },
@@ -10,6 +11,7 @@ const association = {
 export default class MatchesServices {
   constructor(
     private matchModel = Match,
+    private teamServices = new TeamServices(),
   ) {}
 
   public async get(inProgress: string): Promise<Match[]> {
@@ -23,9 +25,15 @@ export default class MatchesServices {
   }
 
   public async add(match: IMatchRequest): Promise<Match> {
+    const verifyTeams = [match.homeTeam, match.awayTeam]
+      .map((team) => this.teamServices.getById(team));
+
+    await Promise.all(verifyTeams);
+
     if (match.homeTeam === match.awayTeam) {
       throw new ConflictError('It is not possible to create a match with two equal teams');
     }
+
     const newMatch = await this.matchModel.create({ ...match, inProgress: true });
     return newMatch;
   }
