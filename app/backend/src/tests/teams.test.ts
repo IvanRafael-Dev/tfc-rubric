@@ -6,6 +6,7 @@ import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Team from '../database/models/Team';
+import * as mock from './mocks'
 
 chai.use(chaiHttp);
 
@@ -15,35 +16,15 @@ describe('GET /teams', () => {
   beforeEach(() => sinon.restore())
   describe('quando a requisição é feita com sucesso', () => {
     it('deve retornar um status 200', async () => {
-      const teams = [
-        {
-          "id": 1,
-          "teamName": "Avaí/Kindermann"
-        },
-        {
-          "id": 2,
-          "teamName": "Bahia"
-        }
-      ]
-      sinon.stub(Team, 'findAll').resolves(teams as Team[]);
+      sinon.stub(Team, 'findAll').resolves(mock.teams as Team[]);
       const httpRequest = await chai.request(app).get('/teams');
       expect(httpRequest.status).to.equal(200);
     });
 
     it('deve retornar um array com os times cadastrados', async () => {
-      const teams = [
-        {
-          "id": 1,
-          "teamName": "Avaí/Kindermann"
-        },
-        {
-          "id": 2,
-          "teamName": "Bahia"
-        }
-      ]
-      sinon.stub(Team, 'findAll').resolves(teams as Team[]);
+      sinon.stub(Team, 'findAll').resolves(mock.teams as Team[]);
       const httpRequest = await chai.request(app).get('/teams');
-      expect(httpRequest.body).to.deep.equal(teams);
+      expect(httpRequest.body).to.deep.equal(mock.teams);
     });
   });
 });
@@ -52,23 +33,15 @@ describe('GET /teams/:id', () => {
   beforeEach(() => sinon.restore())
   describe('quando a requisição é feita com sucesso', () => {
     it('deve retornar um status 200', async () => {
-      const team = {
-        id: 1,
-        teamName: "Avaí/Kindermann"
-      }
-      sinon.stub(Team, 'findByPk').resolves(team as Team);
+      sinon.stub(Team, 'findByPk').resolves(mock.team as Team);
       const httpRequest = await chai.request(app).get('/teams/1');
       expect(httpRequest.status).to.equal(200);
     });
 
     it('deve retornar o time encontrado', async () => {
-      const team = {
-        id: 1,
-        teamName: "Avaí/Kindermann"
-      }
-      sinon.stub(Team, 'findByPk').resolves(team as Team);
+      sinon.stub(Team, 'findByPk').resolves(mock.team as Team);
       const httpRequest = await chai.request(app).get('/teams/1');
-      expect(httpRequest.body).to.deep.equal(team);
+      expect(httpRequest.body).to.deep.equal(mock.team);
       expect(httpRequest.body).to.have.all.keys('id', 'teamName');
     });
   });
