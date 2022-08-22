@@ -1,3 +1,4 @@
+import IMatchUpdate from '../interfaces/IMatchUpdate';
 import ConflictError from '../utils/errors/conflict-error';
 import IMatchRequest from '../interfaces/IMatchRequest';
 import Match from '../database/models/Match';
@@ -36,6 +37,12 @@ export default class MatchesServices {
 
     const newMatch = await this.matchModel.create({ ...match, inProgress: true });
     return newMatch;
+  }
+
+  public async update(id: number, updateData: IMatchUpdate): Promise<void> {
+    const { homeTeamGoals, awayTeamGoals } = updateData;
+    await this.matchModel
+      .update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
   }
 
   public async endGame(id: string): Promise<void> {
