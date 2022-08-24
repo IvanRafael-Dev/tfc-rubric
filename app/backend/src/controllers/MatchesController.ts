@@ -18,7 +18,7 @@ export default class MatchesController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    await this.matchesServices.update(+request.params.id, request.body);
+    await this.matchesServices.update(Number(request.params.id), request.body);
     return response.status(200).json({ message: 'Match updated' });
   }
 
