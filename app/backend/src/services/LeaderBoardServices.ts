@@ -1,5 +1,6 @@
 import Model from '../database/models';
 import leaderBoardHomeQuery from './queries/leaderBoardHome';
+import leaderBoardAwayQuery from './queries/leaderBoardAway';
 
 interface ILeaderBoard {
   name: string
@@ -19,8 +20,12 @@ export default class LeaderBoardServices {
     private model = Model,
   ) {}
 
-  async getHome(): Promise<ILeaderBoard[]> {
-    const [leaderBoardHome] = await this.model.query(leaderBoardHomeQuery);
-    return leaderBoardHome as ILeaderBoard[];
+  async get(url: string): Promise<ILeaderBoard[]> {
+    if (url === '/home') {
+      const [leaderBoardHome] = await this.model.query(leaderBoardHomeQuery);
+      return leaderBoardHome as ILeaderBoard[];
+    }
+    const [leaderBoardAway] = await this.model.query(leaderBoardAwayQuery);
+    return leaderBoardAway as ILeaderBoard[];
   }
 }
