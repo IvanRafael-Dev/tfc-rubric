@@ -1,13 +1,17 @@
 export default `SELECT h.team_name as name,
-SUM(CASE WHEN m.away_team_goals > m.home_team_goals THEN 3 ELSE 0 END) +
-SUM(CASE WHEN m.away_team_goals = m.home_team_goals THEN 1 ELSE 0 END) as totalPoints,
+CAST(SUM(CASE WHEN m.away_team_goals > m.home_team_goals THEN 3 ELSE 0 END) AS UNSIGNED) +
+CAST(SUM(CASE WHEN m.away_team_goals = m.home_team_goals THEN 1 ELSE 0 END) AS UNSIGNED) 
+  AS totalPoints,
 COUNT(h.team_name) as totalGames,
-SUM(CASE WHEN m.away_team_goals > m.home_team_goals THEN 1 ELSE 0 END) as totalVictories,
-SUM(CASE WHEN m.away_team_goals = m.home_team_goals THEN 1 ELSE 0 END) as totalDraws,
-SUM(CASE WHEN m.away_team_goals < m.home_team_goals THEN 1 ELSE 0 END) as totalLosses,
-SUM(m.away_team_goals) as goalsFavor,
-SUM(m.home_team_goals) as goalsOwn,
-SUM(m.away_team_goals) - SUM(m.home_team_goals) as goalsBalance,
+CAST(SUM(CASE WHEN m.away_team_goals > m.home_team_goals THEN 1 ELSE 0 END) AS UNSIGNED) 
+  AS totalVictories,
+CAST(SUM(CASE WHEN m.away_team_goals = m.home_team_goals THEN 1 ELSE 0 END) AS UNSIGNED)
+  AS totalDraws,
+CAST(SUM(CASE WHEN m.away_team_goals < m.home_team_goals THEN 1 ELSE 0 END) AS UNSIGNED)
+  AS totalLosses,
+CAST(SUM(m.away_team_goals) AS UNSIGNED) AS goalsFavor,
+CAST(SUM(m.home_team_goals) AS UNSIGNED) AS goalsOwn,
+CAST(SUM(m.away_team_goals) - SUM(m.home_team_goals) AS SIGNED) AS goalsBalance,
 ROUND(
   SUM(CASE WHEN m.away_team_goals > m.home_team_goals THEN 3 
       WHEN m.away_team_goals = m.home_team_goals THEN 1 ELSE 0 END) /
