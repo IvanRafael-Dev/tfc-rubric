@@ -62,6 +62,18 @@ describe('GET /matches', () => {
 
 describe('POST /matches', () => {
   beforeEach(() => sinon.restore())
+  describe('quando um dos times não existe', () => {
+    it('deve retornar status 404', async () => {
+      sinon.stub(jwt, 'verify').callsFake(() => mock.userMock)
+      sinon.stub(Team, 'findByPk').resolves(null)
+      const httpResponse = await chai
+        .request(app)
+        .post('/matches')
+        .send(mock.newMatchBody)
+        .set('authorization', 'token')
+      expect(httpResponse.status).to.equal(404)
+    })
+  })
   describe('quando a requisição é feita com sucesso', () => {
     it('deve retornar um status 201 com a partida criada', async () => {
 
