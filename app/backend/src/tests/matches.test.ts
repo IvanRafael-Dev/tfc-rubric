@@ -9,6 +9,8 @@ import Team from '../database/models/Team';
 import * as mock from './mocks'
 import Match from '../database/models/Match';
 import * as jwt from 'jsonwebtoken'
+import MatchesServices from '../services/MatchesServices';
+import TeamServices from '../services/TeamsServices';
 
 chai.use(chaiHttp);
 
@@ -64,12 +66,14 @@ describe('POST /matches', () => {
     it('deve retornar um status 201 com a partida criada', async () => {
 
       sinon.stub(jwt, 'verify').callsFake(() => mock.userMock)
+      sinon.stub(Team, 'findByPk').resolves(mock.team as Team)
       sinon.stub(Match, 'create').resolves(mock.newMatch as Match);
-      // const httpResponse = await chai
-      //   .request(app)
-      //   .post('/matches')
-      //   .set('authorization', 'token')
-      // expect(httpResponse.status).to.equal(200)
+      const httpResponse = await chai
+        .request(app)
+        .post('/matches')
+        .send(mock.newMatchBody)
+        .set('authorization', 'token')
+      expect(httpResponse.status).to.equal(201)
     });
   });
 });

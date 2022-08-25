@@ -3,6 +3,12 @@ const validLoginBody = { email: 'valid_email@mail.com', password: 'teste'};
 const noEmailLoginBody = { password: 'valid_password' };
 const noPasswordLoginBody = { email: 'valid_email@mail.com'};
 const invalidEmailLoginBody = { email: 'invalid_email', password: 'valid_password'};
+const newMatchBody = {
+  "homeTeam": 16, 
+  "awayTeam": 8, 
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2
+}
 
 // user
 const userMock = {
@@ -121,6 +127,7 @@ export {
   noEmailLoginBody,
   noPasswordLoginBody,
   invalidEmailLoginBody,
+  newMatchBody,
   userMock,
   teams,
   team,
