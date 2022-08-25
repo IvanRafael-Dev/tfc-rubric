@@ -1,7 +1,12 @@
 import { JsonWebTokenError, JwtPayload, Secret, sign, SignOptions, verify } from 'jsonwebtoken';
 import 'dotenv/config';
 
-export default class JWT {
+interface IJWT {
+  sign(payload: JwtPayload): string
+  verify(token: string): JwtPayload
+}
+
+export default class JWT implements IJWT {
   private secret: Secret;
   private jwtConfig: SignOptions;
 
