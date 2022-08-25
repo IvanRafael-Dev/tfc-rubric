@@ -1,16 +1,13 @@
 import * as sinon from 'sinon';
 import * as chai from 'chai';
+import * as jwt from 'jsonwebtoken'
 // @ts-ignore
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
 import Team from '../database/models/Team';
-
-import * as mock from './mocks'
 import Match from '../database/models/Match';
-import * as jwt from 'jsonwebtoken'
-import MatchesServices from '../services/MatchesServices';
-import TeamServices from '../services/TeamsServices';
+import * as mock from './mocks'
 
 chai.use(chaiHttp);
 
@@ -26,18 +23,6 @@ describe('GET /matches', () => {
       expect(httpResponse.body).to.deep.equal(mock.matches)
     });
   });
-
-  // é possível acessar o banco real no teste de integração?
-  // describe('quando é informada uma "querystring"', () => {
-  //   describe('caso a querystring for false', () => {
-  //     it('deve retornar apenas as partidas em andamento', async () => {
-  //       const httpResponse = await chai.request(app).get('/matches?inProgress=false')
-  //       httpResponse.body.forEach((match: Match) => {
-  //         expect(match.inProgress).to.be.false
-  //       })        
-  //     });
-  //   });
-  // });
 
   describe('quando é informada uma "querystring"', () => {
     describe('caso a querystring for false', () => {
@@ -74,9 +59,22 @@ describe('POST /matches', () => {
       expect(httpResponse.status).to.equal(404)
     })
   })
+
+  describe('quando um a requisicao tem times iguais', () => {
+    it('deve retornar status 401', async () => {
+      sinon.stub(jwt, 'verify').callsFake(() => mock.userMock)
+      sinon.stub(Team, 'findByPk').resolves(mock.team as Team)
+      const httpResponse = await chai
+        .request(app)
+        .post('/matches')
+        .send(mock.newMatchEqualTeamsBody)
+        .set('authorization', 'token')
+      expect(httpResponse.status).to.equal(401)
+    })
+  })
+
   describe('quando a requisição é feita com sucesso', () => {
     it('deve retornar um status 201 com a partida criada', async () => {
-
       sinon.stub(jwt, 'verify').callsFake(() => mock.userMock)
       sinon.stub(Team, 'findByPk').resolves(mock.team as Team)
       sinon.stub(Match, 'create').resolves(mock.newMatch as Match);
@@ -89,3 +87,36 @@ describe('POST /matches', () => {
     });
   });
 });
+
+describe('PATCH /matches/:id', () => {
+  beforeEach(() => sinon.restore());
+  it('deve retornar um status 200', async () => {
+    sinon.stub(Match, 'update').resolves()
+    const httpResponse = await chai
+      .request(app)
+      .patch('/matches/1')
+      .send(mock.updateMatchBody)
+    expect(httpResponse.status).to.equal(200)
+  })
+})
+
+describe('PATCH /matches/:id/finish', () => {
+  beforeEach(() => sinon.restore());
+  it('deve retornar um status 200', async () => {
+    sinon.stub(jwt, 'verify').callsFake(() => mock.userMock)
+    sinon.stub(Match, 'update').resolves()
+    const httpResponse = await chai
+      .request(app)
+      .patch('/matches/1/finish')
+      .send()
+      .set('authorization', 'token')
+    expect(httpResponse.status).to.equal(200)
+  })
+
+  it('não é possivel finalizar um jogo sem estar logado', async () => {
+    const httpResponse = await chai
+      .request(app)
+      .patch('/matches/1/finish')
+    expect(httpResponse.status).to.equal(401)
+  })
+})

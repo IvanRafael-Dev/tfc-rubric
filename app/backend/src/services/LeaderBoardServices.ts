@@ -2,7 +2,7 @@ import Model from '../database/models';
 import leaderBoardHomeQuery from './queries/leaderBoardHome';
 import leaderBoardAwayQuery from './queries/leaderBoardAway';
 
-interface ILeaderBoard {
+export interface ILeaderBoard {
   name: number
   totalPoints: number
   totalGames: number
