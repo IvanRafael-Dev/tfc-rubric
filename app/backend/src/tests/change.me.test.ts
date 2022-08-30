@@ -24,18 +24,6 @@ describe('Testes do APP', () => {
     });
   });
 
-  describe('App chama método start', () => {
-    it('Cobertura do método start', async () => {
-      const appStart = new App();
-    });
-  });
-
-  describe('Server chama método start', () => {
-    it('Cobertura do método start', async () => {
-      const appStart = new Server();
-    });
-  });
-
   describe('Erros não tratados', () => {
     it('devem ser captados pelo middleware de erro com status 500', async () => {
       const httpResponse = await chai.request(app).get('/internal-error');
